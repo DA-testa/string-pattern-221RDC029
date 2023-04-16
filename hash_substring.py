@@ -1,32 +1,42 @@
-# python3
-
 def read_input():
-    # this function needs to aquire input both from keyboard and file
-    # as before, use capital i (input from keyboard) and capital f (input from file) to choose which input type will follow
-    
-    
-    # after input type choice
-    # read two lines 
-    # first line is pattern 
-    # second line is text in which to look for pattern 
-    
-    # return both lines in one return
-    
-    # this is the sample return, notice the rstrip function
-    return (input().rstrip(), input().rstrip())
+    ievade = input().strip()
+    if ievade == "I":
+        pattern = input().strip()
+        text = input().strip()
+    elif ievade == "F":
+        mape = 'tests/06'
+        with open(mape, 'r') as fails:
+            pattern = fails.readline().strip()
+            text = fails.readline().strip()
+    else:
+        print("Nepareiza ievade!")
+    return pattern, text
 
 def print_occurrences(output):
-    # this function should control output, it doesn't need any return
     print(' '.join(map(str, output)))
 
-def get_occurrences(pattern, text):
-    # this function should find the occurances using Rabin Karp alghoritm 
+def hash_aprekins(s, length, base_cipars, prime_cipars):
+    result = 0
+    for i in range(length):
+        result = (base_cipars * result + ord(s[i])) % prime_cipars
+    return result
 
-    # and return an iterable variable
-    return [0]
+def get_occurrences(pattern, text, base_cipars = 13, prime_cipars = 256):
+    pattern_garums = len(pattern)
+    teksta_garums = len(text)
+    pattern_hash = hash_aprekins(pattern, pattern_garums, base_cipars, prime_cipars)
+    text_hash = hash_aprekins(text, pattern_garums, base_cipars, prime_cipars)
+    occurrences = []
+    for i in range(teksta_garums - pattern_garums + 1):
+        if pattern_hash == text_hash:
+            if pattern == text[i : i + pattern_garums]:
+                occurrences.append(i)
+        if i < teksta_garums - pattern_garums:
+            text_hash = ((text_hash - ord(text[i]) * pow(base_cipars, pattern_garums - 1, prime_cipars)) * base_cipars + ord(text[i+pattern_garums])) % prime_cipars
+            if text_hash < 0:
+                text_hash += prime_cipars
+    return occurrences
 
-
-# this part launches the functions
 if __name__ == '__main__':
-    print_occurrences(get_occurrences(*read_input()))
-
+    pattern, text = read_input()
+    print_occurrences(get_occurrences(pattern, text))
