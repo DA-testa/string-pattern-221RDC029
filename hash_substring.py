@@ -4,7 +4,7 @@ def read_input():
         pattern = input().strip()
         text = input().strip()
     elif ievade == "F":
-        mape = 'test/06'
+        mape = 'tests/06'
         with open(mape, 'r') as fails:
             pattern = fails.readline().strip()
             text = fails.readline().strip()
@@ -32,7 +32,7 @@ def get_occurrences(pattern, text, base_cipars = 13, prime_cipars = 256):
             if pattern == text[i : i + pattern_garums]:
                 occurrences.append(i)
         if i < teksta_garums - pattern_garums:
-            text_hash = ((text_hash - ord(text[i]) * pow(base_cipars, pattern_garums-1, prime_cipars)) * base_cipars + ord(text[i+pattern_garums])) % prime_cipars
+            text_hash = ((text_hash - ord(text[i]) * pow(base_cipars, pattern_garums - 1, prime_cipars)) * base_cipars + ord(text[i+pattern_garums])) % prime_cipars
             if text_hash < 0:
                 text_hash += prime_cipars
     return occurrences
