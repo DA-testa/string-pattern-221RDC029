@@ -4,14 +4,12 @@ def read_input():
         pattern = input().strip()
         text = input().strip()
     elif ievade == "F":
-        faila_nosaukums = input()
-        mape = 'test/'
-        with open(mape + faila_nosaukums, 'r') as fails:
+        mape = 'test/06'
+        with open(mape, 'r') as fails:
             pattern = fails.readline().strip()
             text = fails.readline().strip()
     else:
         print("Nepareiza ievade!")
-        return None
     return pattern, text
 
 def print_occurrences(output):
@@ -23,7 +21,7 @@ def hash_aprekins(s, length, base_cipars, prime_cipars):
         result = (base_cipars * result + ord(s[i])) % prime_cipars
     return result
 
-def get_occurrences(pattern, text, base_cipars=13, prime_cipars=256):
+def get_occurrences(pattern, text, base_cipars = 13, prime_cipars = 256):
     pattern_garums = len(pattern)
     teksta_garums = len(text)
     pattern_hash = hash_aprekins(pattern, pattern_garums, base_cipars, prime_cipars)
@@ -31,10 +29,9 @@ def get_occurrences(pattern, text, base_cipars=13, prime_cipars=256):
     occurrences = []
     for i in range(teksta_garums - pattern_garums + 1):
         if pattern_hash == text_hash:
-            if pattern == text[i:i+pattern_garums]:
+            if pattern == text[i : i + pattern_garums]:
                 occurrences.append(i)
         if i < teksta_garums - pattern_garums:
-            # recalculate hash of the next substring
             text_hash = ((text_hash - ord(text[i]) * pow(base_cipars, pattern_garums-1, prime_cipars)) * base_cipars + ord(text[i+pattern_garums])) % prime_cipars
             if text_hash < 0:
                 text_hash += prime_cipars
